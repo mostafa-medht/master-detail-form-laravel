@@ -4,7 +4,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        Create PR
+        <h5>Create PR</h5>
     </div>
 
     <div class="card-body">
@@ -93,11 +93,13 @@
 
             <div class="card">
                 <div class="card-header">
-                    Items
+                    <h5>
+                        Items
+                    </h5>
                 </div>
 
                 <div class="card-body">
-                    <div class="table" id="items_table">
+                    <div id="items_table">
                             <h6 class="card-title">
                                 Item Details
                             </h6>
@@ -145,7 +147,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <td>
-                                                    <input type="datetime-local" name="time[]" placeholder="Due Time..." class="form-control"/>
+                                                    <input type="number" name="budget[]" placeholder="Budget..." class="form-control"/>
                                                 </td>
                                             </div>
                                         </div>
