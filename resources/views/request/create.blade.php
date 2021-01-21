@@ -98,16 +98,14 @@
 
                 <div class="card-body">
                     <div class="table" id="items_table">
-                        <div class="card-header">
-                            <h6>
+                            <h6 class="card-title">
                                 Item Details
                             </h6>
-                        </div>
                         <div>
                             @foreach (old('items', ['']) as $index => $oldProduct)
-                                <div class="input-group input-group-sm">
+                                
                                     <div id="item{{ $index }}">
-                                        <div class="row mb-">
+                                        <div class="row mb-1">
                                             <div class="col-md-3">
                                                 <td>
                                                     <input type="text" name="items[]" placeholder="Item Name..." class="form-control">
@@ -129,8 +127,31 @@
                                                 </td>
                                             </div>
                                         </div>
+                                        <div class="row mb-1">
+                                            <div class="col-md-3">
+                                                <td>
+                                                    <input type="number" name="quantities[]" placeholder="Qt required to purchase..." class="form-control">
+                                                </td>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <td>
+                                                    <input type="number" name="qtonstore[]" placeholder="Qt On Store..." class="form-control"/>
+                                                </td>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <td>
+                                                    <input type="text" name="acqt[]" placeholder="Actually Qt required to purchase..." class="form-control"/>
+                                                </td>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <td>
+                                                    <input type="datetime-local" name="time[]" placeholder="Due Time..." class="form-control"/>
+                                                </td>
+                                            </div>
+                                        </div>
+                                        <hr>
                                     </div>
-                                </div>
+                                
                             @endforeach
                             <div id="item{{ count(old('items', [''])) }}"></div>
                         </div>
