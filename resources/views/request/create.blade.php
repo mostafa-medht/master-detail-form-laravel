@@ -109,46 +109,30 @@
                                     <div id="item{{ $index }}">
                                         <div class="row mb-1">
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="text" name="items[]" placeholder="Item Name..." class="form-control">
-                                                </td>
+                                                <input type="text" name="items[]" placeholder="Item Name..." class="form-control">
                                             </div>
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="text" name="description[]" placeholder="description..." class="form-control"/>
-                                                </td>
+                                                <input type="text" name="description[]" placeholder="description..." class="form-control"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="text" name="specification[]" placeholder="specification..." class="form-control"/>
-                                                </td>
+                                                <input type="text" name="specification[]" placeholder="specification..." class="form-control"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="datetime-local" name="time[]" placeholder="Due Time..." class="form-control"/>
-                                                </td>
+                                                <input type="datetime-local" name="time[]" placeholder="Due Time..." class="form-control"/>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="number" name="quantities[]" placeholder="Qt required to purchase..." class="form-control">
-                                                </td>
+                                                <input type="number" name="quantities[]" placeholder="Qt required to purchase..." class="form-control qrtp">
                                             </div>
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="number" name="qtonstore[]" placeholder="Qt On Store..." class="form-control"/>
-                                                </td>
+                                                <input type="number" name="qtonstore[]" placeholder="Qt On Store..." class="form-control qos"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="text" name="acqt[]" placeholder="Actually Qt required to purchase..." class="form-control"/>
-                                                </td>
+                                                <input type="number" name="acqt[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <td>
-                                                    <input type="number" name="budget[]" placeholder="Budget..." class="form-control"/>
-                                                </td>
+                                                <input type="number" name="budget[]" placeholder="Budget..." class="form-control"/>
                                             </div>
                                         </div>
                                         <hr>
@@ -161,14 +145,14 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <button id="add_row" class="btn btn-secondary pull-left">+ Add Row</button>
-                            <button id='delete_row' class="pull-right btn btn-danger">- Delete Row</button>
+                            <button id="add_row" class="btn btn-sm btn-secondary pull-left">+ Add Row</button>
+                            <button id='delete_row' class="pull-right btn btn-danger btn-sm">- Delete Row</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div>
-                <input class="btn btn-danger" type="submit" value="Save">
+                <input class="btn btn-success" type="submit" value="Save">
             </div>
         </form>
 
@@ -181,23 +165,58 @@
 <script>
    $(document).ready(function(){
     let row_number = {{ count(old('items', [''])) }};
+    console.log(row_number);
+    
+    if (row_number<=1) {
+        $("#delete_row").hide(); 
+    }
+
     $("#add_row").click(function(e){
       e.preventDefault();
+
       let new_row_number = row_number - 1;
       console.log(row_number);
       console.log(new_row_number);
       $('#item' + row_number).html($('#item' + new_row_number).html()).find('td:first-child');
       $('#items_table').append('<div id="item' + (row_number + 1) + '"></div>');
       row_number++;
+    
+      if (row_number>=2) {
+        $("#delete_row").show(); 
+        }
     });
 
     $("#delete_row").click(function(e){
       e.preventDefault();
+      console.log(row_number);
       if(row_number > 1){
         $("#item" + (row_number - 1)).html('');
         row_number--;
       }
+      if (row_number<=1) {
+        $("#delete_row").hide(); 
+        }
     });
+  
+    // $(".qrtp, .qos").on("keydown keyup", function(event) {
+    //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
+
+    // });
+
+    // $(".qrtp, .qos").on("keydown keyup", function(event) {
+    //     $(".aqrtp").each(function(){
+    //         // Math.abs(Number($(".qrtp").val()) - Number($(".qos").val()));
+    //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
+
+    //     });
+    // });
+
+    $(".qrtp, .qos").each(function(){
+        $(".qrtp, .qos").on("keydown keyup", function(event) {
+        $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
+        });        
+    });
+  
   });
 </script>
 @endsection
