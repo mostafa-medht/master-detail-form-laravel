@@ -13,7 +13,6 @@ class RequestsController extends Controller
         // abort_if(Gate::denies('order_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // $products = Product::all();
-
         return view('request.create');
     }
 
