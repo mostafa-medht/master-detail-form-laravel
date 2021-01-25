@@ -99,59 +99,41 @@
                 </div>
 
                 <div class="card-body">
-                    
-                            <h6 class="card-title">
-                                Item Details
-                            </h6>
-                        <div id="items_table">
-                            @foreach (old('items', ['']) as $index => $oldProduct)
-                                    <div id="item{{ $index }}" class="tr">
-                                        <div class="row mb-1">
-                                            <div class="col-md-3">
-                                                <input type="text" name="items[]" placeholder="Item Name..." class="form-control">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="descriptions[]" placeholder="description..." class="form-control"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="specifications[]" placeholder="specification..." class="form-control"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="datetime-local" name="dates[]" placeholder="Due Time..." class="form-control"/>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1" >
-                                            <div class="col-md-3">
-                                                <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" name="budgets[]" placeholder="Budget..." class="form-control"/>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                    </div>
-                                
+                    <table class="table" id="products_table">
+                        
+                            Product Detail
+                        <tbody>
+                            @foreach (old('products', ['']) as $index => $oldProduct)
+                                <tr id="product{{ $index }}">
+                                    <td>
+                                        <input type="number" name="quantities[]" placeholder="Qt required to purchase..." class="form-control qrtp">
+                                    </td>
+                                    <td>   
+                                        <input type="number" name="qtonstore[]" placeholder="Qt On Store..." class="form-control qos"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="acqt[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp"/>
+                                    </td>
+                                    <td>
+                                       <input type="number" name="budget[]" placeholder="Budget..." class="form-control"/>
+                                    </td>
+                                </div>
+                                </tr>
                             @endforeach
-                            <div id="item{{ count(old('items', [''])) }}" class="tr"></div>
-                        </div>
-                    
+                            <tr id="product{{ count(old('products', [''])) }}"></tr>
+                        </tbody>
+                    </table>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <button id="add_row" class="btn btn-sm btn-secondary pull-left">+ Add Row</button>
-                            <button id='delete_row' class="pull-right btn btn-danger btn-sm">- Delete Row</button>
+                            <button id="add_row" class="btn btn-default pull-left">+ Add Row</button>
+                            <button id='delete_row' class="pull-right btn btn-danger">- Delete Row</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div>
-                <input class="btn btn-success" type="submit" value="Save">
+                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>
         </form>
 
@@ -162,61 +144,31 @@
 
 @section('scripts')
 <script>
-   $(document).ready(function(){
-    let row_number = {{ count(old('items', [''])) }};
-    console.log(row_number);
-    
-    if (row_number<=1) {
-        $("#delete_row").hide(); 
-    }
-
+  $(document).ready(function(){
+    let row_number = {{ count(old('products', [''])) }};
     $("#add_row").click(function(e){
       e.preventDefault();
-
       let new_row_number = row_number - 1;
-      console.log(row_number);
-      console.log(new_row_number);
-      $('#item' + row_number).html($('#item' + new_row_number).html());
-      $('#items_table').append('<div id="item' + (row_number + 1) + '" class="tr"></div>');
+      $('#product' + row_number).html($('#product' + new_row_number).html()).find('td:last-child');
+      $('#products_table').append('<tr id="product' + (row_number + 1) + '"></tr>');
       row_number++;
-    
-      if (row_number>=2) {
-        $("#delete_row").show(); 
-        }
     });
 
     $("#delete_row").click(function(e){
       e.preventDefault();
-      console.log(row_number);
       if(row_number > 1){
-        $("#item" + (row_number - 1)).html('');
+        $("#product" + (row_number - 1)).html('');
         row_number--;
       }
-      if (row_number<=1) {
-        $("#delete_row").hide(); 
-        }
     });
-  
-    // $(".qrtp, .qos").on("keydown keyup", function(event) {
-    //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
 
-    // });
-
-    // $(".qrtp, .qos").each(function(){
-    //     $(".qrtp, .qos").on("keydown keyup", function(event) {
-    //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
-    //     });        
-    // });
-  
-    $('#items_table').on('keydown keyup','.tr', function(){
+    $('tbody').on('keydown keyup','tr', function(){
         let qrtp = $(this).find('.qrtp').val();
         let qos =  $(this).find('.qos').val();
 
         let subtract = Math.abs(qrtp-qos);
         $(this).find('.aqrtp').val(subtract);
-    });
-    
-
+    }); 
   });
 </script>
 @endsection

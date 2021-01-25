@@ -27,7 +27,7 @@ Route::get('/request/create',[
     'as' => 'request.create'
 ]);
 
-Route::get('/request/store',[
+Route::post('/request/store',[
     'uses' => 'RequestsController@store',
     'as' => 'request.store'
 ]);

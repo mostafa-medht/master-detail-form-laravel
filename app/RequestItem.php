@@ -2,12 +2,23 @@
 
 namespace App;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class RequestItem extends Model
 {
+    protected $fillable = [
+        'item',
+        'description',
+        'specification',
+        'date',
+        'qtreqtopur',
+        'qtonstore',  
+        'acqtreqtopur',
+        'budget',
+        'request_id'  
+    ];
+
     public function request(){
-        return $this->belongsTo('App\Request');
+        return $this->belongsTo('App\PrRequest');
     }
 }
