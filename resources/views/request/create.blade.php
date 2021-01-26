@@ -128,7 +128,7 @@
                                                 <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}"/>
+                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}" readonly/>
                                             </div>
                                             <div class="col-md-3">
                                                 <input type="number" name="budgets[]" placeholder="Budget..." class="form-control budget" value="{{ old('budgets.' . $index) ?? '' }}"/>
@@ -141,21 +141,24 @@
                             <div id="item{{ count(old('items', [''])) }}" class="tr"></div>
                         </div>
                     
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="text" class="form-control mb-2 right totalbudget" placeholder="Total budget" name="totalbudget" id="totalbudget">
+                    <div class="row mb-3">
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col">
+                            <input type="text" class="form-control totalbudget" placeholder="Total budget" name="totalbudget" id="totalbudget" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <button id="add_row" class="btn btn-sm btn-secondary pull-left">+ Add Row</button>
+                            <button id="add_row" class="btn btn-sm btn-dark pull-left">+ Add Row</button>
                             <button id='delete_row' class="pull-right btn btn-danger btn-sm">- Delete Row</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div>
-                <input class="btn btn-success" type="submit" value="Save">
+                <input class="btn btn-success" type="submit" value="Save Request">
             </div>
         </form>
 
