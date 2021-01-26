@@ -1,114 +1,142 @@
 @extends('layouts.app')
-
-
 @section('content')
+<div class="row mb-2">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route("requests.create") }}">
+            Add Request
+        </a>
+    </div>
+</div>
 <div class="card">
     <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.order.title_singular') }}
+        <h5>Requests List</h5>
     </div>
 
-    <div class="card-body">
-        <form action="{{ route("orders.store") }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group {{ $errors->has('customer_name') ? 'has-error' : '' }}">
-                <label for="customer_name">{{ trans('cruds.order.fields.customer_name') }}*</label>
-                <input type="text" id="customer_name" name="customer_name" class="form-control" value="{{ old('customer_name', isset($order) ? $order->customer_name : '') }}" required>
-                @if($errors->has('customer_name'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('customer_name') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.order.fields.customer_name_helper') }}
-                </p>
-            </div>
-            <div class="form-group {{ $errors->has('customer_email') ? 'has-error' : '' }}">
-                <label for="customer_email">{{ trans('cruds.order.fields.customer_email') }}</label>
-                <input type="email" id="customer_email" name="customer_email" class="form-control" value="{{ old('customer_email', isset($order) ? $order->customer_email : '') }}">
-                @if($errors->has('customer_email'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('customer_email') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.order.fields.customer_email_helper') }}
-                </p>
-            </div>
+        <div class="card-body">
+        <div class="table-responsive">
+            <table class=" table table-bordered table-striped table-hover datatable datatable-Order">
+                <thead>
+                    <tr>
+                        <th width="10">
 
-            <div class="card">
-                <div class="card-header">
-                    Products
-                </div>
+                        </th>
+                        <th>
+                            Request_#
+                        </th>
+                        <th>
+                            Request Date
+                        </th>
+                        <th>
+                            Items   
+                        </th>
+                        <th>
+                            Total Budget
+                        </th>
+                        <th>
+                            Due Time
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($prrequests as $key => $prrequest)
+                        <tr class="justify-content-center" data-entry-id="{{ $prrequest->id }}">
+                            <td>
 
-                <div class="card-body">
-                    <table class="table" id="products_table">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (old('products', ['']) as $index => $oldProduct)
-                                <tr id="product{{ $index }}">
-                                    <td>
-                                        <select name="products[]" class="form-control">
-                                            <option value="">-- choose product --</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ $product->id }}"{{ $oldProduct == $product->id ? ' selected' : '' }}>
-                                                    {{ $product->name }} (${{ number_format($product->price, 2) }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="quantities[]" class="form-control" value="{{ old('quantities.' . $index) ?? '1' }}" />
-                                    </td>
-                                </tr>
-                            @endforeach
-                            <tr id="product{{ count(old('products', [''])) }}"></tr>
-                        </tbody>
-                    </table>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button id="add_row" class="btn btn-default pull-left">+ Add Row</button>
-                            <button id='delete_row' class="pull-right btn btn-danger">- Delete Row</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
-            </div>
-        </form>
+                            </td>
+                            <td>
+                                {{ $prrequest->request_number ?? '' }}
+                            </td>
+                            <td>
+                                {{ $prrequest->date}}</td>
+                            <td>
+                                <ul>
+                                @foreach($prrequest->requestitems as $key => $item)
+                                    <li>{{ $item->item }} ({{ $item->budget }} L.E)</li>
+                                @endforeach
+                                </ul>
+                            </td>
+                            <td>
+                                @foreach($prrequest->requestitems as $key => $item)
+                                    {{$item->totalbudget}}
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach($prrequest->requestitems as $key => $item)
+                                    {{$item->date}}
+                                    <br>
+                                @endforeach  
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="{{ route('requests.show', $prrequest->id) }}">
+                                    view
+                                </a>
+                                <a class="btn btn-sm btn-info" href="{{ route('requests.edit', $prrequest->id) }}">
+                                    edit
+                                </a>
+                                <form action="{{ route('requests.destroy', $prrequest->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit" class="btn btn-sm btn-danger" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
 
     </div>
 </div>
 @endsection
-
 @section('scripts')
+@parent
 <script>
-  $(document).ready(function(){
-    let row_number = {{ count(old('products', [''])) }};
-    $("#add_row").click(function(e){
-      e.preventDefault();
-      let new_row_number = row_number - 1;
-      $('#product' + row_number).html($('#product' + new_row_number).html()).find('td:first-child');
-      $('#products_table').append('<tr id="product' + (row_number + 1) + '"></tr>');
-      row_number++;
-    });
+    $(function () {
+  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+@can('order_delete')
+  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButton = {
+    text: deleteButtonTrans,
+    url: "{{ route('admin.orders.massDestroy') }}",
+    className: 'btn-danger',
+    action: function (e, dt, node, config) {
+      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
+          return $(entry).data('entry-id')
+      });
 
-    $("#delete_row").click(function(e){
-      e.preventDefault();
-      if(row_number > 1){
-        $("#product" + (row_number - 1)).html('');
-        row_number--;
+      if (ids.length === 0) {
+        alert('{{ trans('global.datatables.zero_selected') }}')
+
+        return
       }
-    });
-  });
-</script>
-@endsection
 
+      if (confirm('{{ trans('global.areYouSure') }}')) {
+        $.ajax({
+          headers: {'x-csrf-token': _token},
+          method: 'POST',
+          url: config.url,
+          data: { ids: ids, _method: 'DELETE' }})
+          .done(function () { location.reload() })
+      }
+    }
+  }
+  dtButtons.push(deleteButton)
+@endcan
+
+  $.extend(true, $.fn.dataTable.defaults, {
+    order: [[ 1, 'desc' ]],
+    pageLength: 100,
+  });
+  $('.datatable-Order:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+    });
+})
+
+</script>
 @endsection

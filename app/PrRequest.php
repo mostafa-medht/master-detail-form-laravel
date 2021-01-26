@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class PrRequest extends Model
 {
-    protected $dates = [
-        'date'
-    ];
-
     protected $fillable = [
         'date',
         'request_number',

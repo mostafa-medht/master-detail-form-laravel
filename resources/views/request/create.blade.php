@@ -4,11 +4,11 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h5>Create PR</h5>
+        <h5>Create Purchase Request</h5>
     </div>
 
     <div class="card-body">
-        <form action="{{ route("request.store") }}" class="form" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("requests.store") }}" class="form" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="row justify-content-center mb-1">
@@ -16,7 +16,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="">Date: </span>
                     </div>
-                    <input type="date" id="date" name="date" class="form-control bfh-datepicker" value="{{ old('date') }}"> 
+                    <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"> 
                     @if($errors->has('date'))
                         <em class="invalid-feedback">
                             {{ $errors->first('date') }}
@@ -47,7 +47,7 @@
                     <div class="input-group-prepend">
                       <label class="input-group-text" for="inputGroupSelect01">Department</label>
                     </div>
-                    <select name="department" class="custom-select" id="inputGroupSelect01">
+                    <select name="department" class="custom-select" id="inputGroupSelect01" value="{{ old('department') }}">
                       <option selected>Choose...</option>
                       <option value="1">IT</option>
                       <option value="2">Legal Affairs</option>
@@ -108,30 +108,30 @@
                                     <div id="item{{ $index }}" class="tr">
                                         <div class="row mb-1">
                                             <div class="col-md-3">
-                                                <input type="text" name="items[]" placeholder="Item Name..." class="form-control">
+                                                <input type="text" name="items[]" placeholder="Item Name..." class="form-control" value="{{ old('items.' . $index) ?? '' }}">
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" name="descriptions[]" placeholder="description..." class="form-control"/>
+                                                <input type="text" name="descriptions[]" placeholder="description..." class="form-control" value="{{ old('descriptions.' . $index) ?? '' }}"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" name="specifications[]" placeholder="specification..." class="form-control"/>
+                                                <input type="text" name="specifications[]" placeholder="specification..." class="form-control" value="{{ old('specifications.' . $index) ?? '' }}"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="datetime-local" name="dates[]" placeholder="Due Time..." class="form-control"/>
+                                                <input type="date" name="dates[]" placeholder="Due Time..." class="form-control" value="{{ old('dates.' . $index) ?? '' }} "/>
                                             </div>
                                         </div>
                                         <div class="row mb-1" >
                                             <div class="col-md-3">
-                                                <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp">
+                                                <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp" value="{{ old('qtreqtopurs.' . $index) ?? '' }}"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos"/>
+                                                <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp"/>
+                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="number" name="budgets[]" placeholder="Budget..." class="form-control"/>
+                                                <input type="number" name="budgets[]" placeholder="Budget..." class="form-control budget" value="{{ old('budgets.' . $index) ?? '' }}"/>
                                             </div>
                                         </div>
                                         <hr>
@@ -141,7 +141,11 @@
                             <div id="item{{ count(old('items', [''])) }}" class="tr"></div>
                         </div>
                     
-
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control mb-2 right totalbudget" placeholder="Total budget" name="totalbudget" id="totalbudget">
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <button id="add_row" class="btn btn-sm btn-secondary pull-left">+ Add Row</button>
@@ -171,7 +175,7 @@
     }
 
     $("#add_row").click(function(e){
-      e.preventDefault();
+       e.preventDefault();
 
       let new_row_number = row_number - 1;
       console.log(row_number);
@@ -201,19 +205,24 @@
     //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
 
     // });
-
-    // $(".qrtp, .qos").each(function(){
-    //     $(".qrtp, .qos").on("keydown keyup", function(event) {
-    //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
-    //     });        
-    // });
   
+    // Sbstraction 2 values to get actual quantity to purchase    
     $('#items_table').on('keydown keyup','.tr', function(){
         let qrtp = $(this).find('.qrtp').val();
         let qos =  $(this).find('.qos').val();
 
         let subtract = Math.abs(qrtp-qos);
         $(this).find('.aqrtp').val(subtract);
+
+        // Total budget
+        if (!isNaN($(this).find('.budget').val())) {
+            let totalbudget = 0;
+            $('.budget').each(function(){
+                let sumtotalvalue = Number($(this).val());
+                totalbudget += isNaN(sumtotalvalue) ? 0 : sumtotalvalue;
+            });
+            $('.totalbudget').val(totalbudget);
+        }
     });
     
 

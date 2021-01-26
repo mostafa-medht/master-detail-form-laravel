@@ -22,12 +22,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/request/create',[
-    'uses' => 'RequestsController@create',
-    'as' => 'request.create'
-]);
+// Route::get('/request/create',[
+//     'uses' => 'RequestsController@create',
+//     'as' => 'request.create'
+// ]);
 
-Route::post('/request/store',[
-    'uses' => 'RequestsController@store',
-    'as' => 'request.store'
-]);
+// Route::post('/request/store',[
+//     'uses' => 'RequestsController@store',
+//     'as' => 'request.store'
+// ]);
+
+Route::resource('requests', 'RequestsController');

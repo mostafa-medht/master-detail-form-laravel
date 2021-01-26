@@ -15,6 +15,7 @@ class RequestItem extends Model
         'qtonstore',  
         'acqtreqtopur',
         'budget',
+        'totalbudget',
         'request_id'  
     ];
 
