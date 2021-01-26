@@ -49,9 +49,9 @@
                     </div>
                     <select name="department" class="custom-select" id="inputGroupSelect01" value="{{ old('department') }}">
                       <option selected>Choose...</option>
-                      <option value="1">IT</option>
-                      <option value="2">Legal Affairs</option>
-                      <option value="3">HR</option>
+                      <option value="IT">IT</option>
+                      <option value="Legal Affairs">Legal Affairs</option>
+                      <option value="HR">HR</option>
                     </select>
                 </div>
                 <div class="input-group input-group-sm col-md-6">
@@ -60,9 +60,9 @@
                       </div>
                       <select name="project" class="custom-select" id="inputGroupSelect01">
                         <option selected>Choose...</option>
-                        <option value="1">asproject</option>
-                        <option value="2">ncproject</option>
-                        <option value="3">mproject</option>
+                        <option value="Aswan Project">aswan_project</option>
+                        <option value="New Capital Project">new_capital_cproject</option>
+                        <option value="Minya">minya_project</option>
                       </select>
                 </div>
             </div>
@@ -74,9 +74,9 @@
                       </div>
                       <select name="site" class="custom-select" id="inputGroupSelect01">
                         <option selected>Choose...</option>
-                        <option value="1">Aswan</option>
-                        <option value="2">New Capital</option>
-                        <option value="3">Minya</option>
+                        <option value="Aswan">Aswan</option>
+                        <option value="New Capital">New Capital</option>
+                        <option value="Minya">Minya</option>
                       </select>
                 </div>
                 <div class="input-group input-group-sm col-md-6">
@@ -85,8 +85,8 @@
                       </div>
                       <select name="group" class="custom-select" id="inputGroupSelect01">
                         <option selected>Choose...</option>
-                        <option value="1">Product</option>
-                        <option value="2">Service</option>
+                        <option value="Product">Product</option>
+                        <option value="Product">Service</option>
                       </select>
                 </div>
             </div>

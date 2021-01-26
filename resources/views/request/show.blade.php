@@ -8,55 +8,55 @@
 
     <div class="card-body">
         <div class="mb-2">
-            <table class="table table-bordered table-striped">
+            <table style="width: 40%" class="table table-bordered table-striped table-sm p-2">
                 <tbody>
                     <tr>
-                        <th>
+                        <th style="padding: 5px">
                             Request Number
                         </th>
-                        <td>
+                        <th>
                             {{ $prrequest->request_number }}
-                        </td>
+                        </th>
                     </tr>
                     <tr>
                         <th>
                             Date
                         </th>
-                        <td>
+                        <th>
                             {{ $prrequest->date }}
-                        </td>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                          Department  
+                            Department  
                         </th>
-                        <td>
+                        <th>
                             {{ $prrequest->department }}
-                        </td>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                          Project  
+                            Project  
                         </th>
-                        <td>
+                        <th>
                             {{ $prrequest->project }}
-                        </td>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                          Site  
+                            Site  
                         </th>
-                        <td>
+                        <th>
                             {{ $prrequest->site }}
-                        </td>
+                        </th>
                     </tr>
                     <tr>
                         <th>
-                          Group  
+                            Group  
                         </th>
-                        <td>
+                        <th>
                             {{ $prrequest->group }}
-                        </td>
+                        </th>
                     </tr>
                 </tbody>
             </table>
@@ -76,13 +76,13 @@
                                     Item
                                 </th>
                                 <th>
-                                    qtreqtopur
+                                    quantty_req_to_pur
                                 </th>
                                 <th>
-                                    qtonstore
+                                    quantity_on_store
                                 </th>
                                 <th>
-                                    acqtreqtopur
+                                    actual_qt_req_to_pur
                                 </th>
                                 <th>
                                     Due Time
@@ -102,15 +102,35 @@
                                 <th>
                                     {{$requestitem->item}}
                                 </th>
+                                <th>
+                                    {{$requestitem->qtreqtopur}}
+                                </th>
+                                <th>
+                                    {{$requestitem->qtonstore}}
+                                </th>
+                                <th>
+                                    {{$requestitem->acqtreqtopur}}
+                                </th>
+                                <th>
+                                    {{$requestitem->date}}
+                                </th>
+                                <th>
+                                    {{$requestitem->budget}}
+                                </th>
                             </tr>
-                        @endforeach    
+                        @endforeach
+                            <tr>
+                                <th>Total Budget : </th>
+                                <td colspan="5"></td>
+                                <th>{{$requestitems[0]->totalbudget}}</th>
+                            </tr>    
                         </tbody>    
                     </table>    
                 </div>    
                 </div>
             </div>
-            <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
-                {{ trans('global.back_to_list') }}
+            <a class="btn btn-secondary mt-3" href="{{ url()->previous() }}">
+                Back To List
             </a>
         </div>
 
