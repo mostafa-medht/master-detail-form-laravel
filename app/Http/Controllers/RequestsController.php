@@ -82,8 +82,8 @@ class RequestsController extends Controller
 
         $requestitems = $prrequest->requestitems()->get();
 
-        
-        return view('request.show', compact('prrequest', 'requestitems'));
+        $indexCount =1;
+        return view('request.show', compact('prrequest', 'requestitems','indexCount'));
     }
 
     /**

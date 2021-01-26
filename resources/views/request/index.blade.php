@@ -59,9 +59,9 @@
                                 </ul>
                             </td>
                             <td>
-                                @foreach($prrequest->requestitems as $key => $item)
-                                    {{$item->totalbudget}}
-                                @endforeach
+                                {{-- @foreach($prrequest->requestitems as $key => $item) --}}
+                                    {{$prrequest->requestitems[0]->totalbudget}}
+                                {{-- @endforeach --}}
                             </td>
                             <td>
                                 @foreach($prrequest->requestitems as $key => $item)

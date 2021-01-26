@@ -93,17 +93,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach ($requestitems->chunk(count($requestitems)) as $chunk)
-                            @foreach ($chunk as $requestitem)
+                        @foreach ($requestitems as $requestitem)
                             <tr>
                                 <th>
-                                    {{$requestitem->id}}
+                                    {{-- {{$requestitem->id}} --}}
+                                    {{ $indexCount++}}
                                 </th>
                                 <th>
                                     {{$requestitem->item}}
                                 </th>
                             </tr>
-                            @endforeach
                         @endforeach    
                         </tbody>    
                     </table>    
