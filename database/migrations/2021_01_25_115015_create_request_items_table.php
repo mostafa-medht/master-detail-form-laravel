@@ -23,7 +23,8 @@ class CreateRequestItemsTable extends Migration
             $table->integer('qtonstore');
             $table->integer('acqtreqtopur');
             $table->integer('budget');
-            $table->bigInteger('totalbudget');
+            $table->integer('rowbudget');
+            // $table->bigInteger('sumoftotalbudget');
 
             $table->integer('pr_request_id');
 

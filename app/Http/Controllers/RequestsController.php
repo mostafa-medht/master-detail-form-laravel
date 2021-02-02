@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use App\PrRequest;
 use App\RequestItem;
-
 use Illuminate\Http\Request;
 
 class RequestsController extends Controller
@@ -16,9 +15,8 @@ class RequestsController extends Controller
     public function index()
     {
         $prrequests = PrRequest::with('requestitems')->get();
-
+        // dd($prrequests);
         // $totalBudget = PrRequest::prrequest()->requestitems->totalbudget;
-
         return view('request.index', compact('prrequests'));
     }
 
@@ -83,7 +81,7 @@ class RequestsController extends Controller
         $requestitems = $prrequest->requestitems()->get();
 
         $indexCount =1;
-        return view('request.show', compact('prrequest', 'requestitems','indexCount'));
+        return view('resquest.show', compact('prrequest', 'requestitems','indexCount'));
     }
 
     /**
@@ -119,5 +117,6 @@ class RequestsController extends Controller
     {
         //
     }
+
+}    
     
-}

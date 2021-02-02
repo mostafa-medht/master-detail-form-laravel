@@ -8,7 +8,7 @@
     </div>
 
     <div class="card-body">
-        <form action="{{ route("requests.store") }}" class="form" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("requests.store") }}" class="form" autocomplete="on" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="row justify-content-center mb-1">
@@ -16,7 +16,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="">Date: </span>
                     </div>
-                    <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"> 
+                    <input type="date" id="date" name="date" class="form-control" readonly> 
                     @if($errors->has('date'))
                         <em class="invalid-feedback">
                             {{ $errors->first('date') }}
@@ -103,56 +103,75 @@
                             <h6 class="card-title">
                                 Item Details
                             </h6>
-                        <div id="items_table">
+                        <div id="items_table" class="table">
                             @foreach (old('items', ['']) as $index => $oldProduct)
-                                    <div id="item{{ $index }}" class="tr">
-                                        <div class="row mb-1">
-                                            <div class="col-md-3">
-                                                <input type="text" name="items[]" placeholder="Item Name..." class="form-control" value="{{ old('items.' . $index) ?? '' }}">
+                                    <div id="item" class="tr">
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                <div class="row mb-1">
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="items[]" placeholder="Item Name..." class="form-control" value="{{ old('items.' . $index) ?? '' }}">
+                                                    </div>
+                    
+                                                    <div class="col-md-3">
+                                                        <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp" value="{{ old('qtreqtopurs.' . $index) ?? '' }}"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}" readonly/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="text" name="dates[]" placeholder="Due Time..." onfocus="(this.type='date')" class="form-control" value="{{ old('dates.' . $index) ?? '' }}"/>
+                                                    </div> 
+                                                </div>
+                                                <div class="row mb-1" >
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="descriptions[]" placeholder="description..." class="form-control" value="{{ old('descriptions.' . $index) ?? '' }}"/>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="specifications[]" placeholder="specification..." class="form-control" value="{{ old('specifications.' . $index) ?? '' }}"/>
+                                                    </div>
+                                                    <div class="col-md-2"> 
+                                                    <select class="form-control currency" id="demo-number-symbol">
+                                                        <option selected>Currency..</option>
+                                                        <option value="EGP ">EGP</option>
+                                                        <option value="$ ">$</option>
+                                                        <option value="&pound; ">&pound;</option>
+                                                        <option data-locale="european" value="&euro; ">&euro; </option>
+                                                    </select>
+                                                    </div>   
+                                                    <div class="col-md-2">
+                                                        <input type="number" name="budgets[]" placeholder="Budget For Piece..." class="form-control budgetforpiece" value="{{ old('budgets.' . $index) ?? '' }}"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="text" name="rowbudgets[]" placeholder="Total Budget..." class="form-control rowbudget" value="{{ old('budgets.' . $index) ?? '' }}" readonly/>
+                                                    </div>      
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="descriptions[]" placeholder="description..." class="form-control" value="{{ old('descriptions.' . $index) ?? '' }}"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="specifications[]" placeholder="specification..." class="form-control" value="{{ old('specifications.' . $index) ?? '' }}"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="date" name="dates[]" placeholder="Due Time..." class="form-control" value="{{ old('dates.' . $index) ?? '' }} "/>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1" >
-                                            <div class="col-md-3">
-                                                <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp" value="{{ old('qtreqtopurs.' . $index) ?? '' }}"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}" readonly/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" name="budgets[]" placeholder="Budget..." class="form-control budget" value="{{ old('budgets.' . $index) ?? '' }}"/>
+                                            <div class="col-md-1 mb-3">
+                                                <button type="button" id='delete_row' class="mt-4 rounded-pill btn btn-danger btn-sm">Delete</button>
                                             </div>
                                         </div>
                                         <hr>
                                     </div>
                                 
                             @endforeach
-                            <div id="item{{ count(old('items', [''])) }}" class="tr"></div>
+                            {{-- <div id="item{{ count(old('items', [''])) }}" class="tr"></div> --}}
                         </div>
                     
                     <div class="row mb-3">
                         <div class="col"></div>
                         <div class="col"></div>
-                        <div class="col"></div>
-                        <div class="col">
-                            <input type="text" class="form-control totalbudget" placeholder="Total budget" name="totalbudget" id="totalbudget" readonly>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control sumrowbudget" placeholder="Total budget" name="totalbudget" id="totalbudget" readonly>
                         </div>
+                        <div class="col-md-1"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <button id="add_row" class="btn btn-sm btn-dark pull-left">+ Add Row</button>
-                            <button id='delete_row' class="pull-right btn btn-danger btn-sm">- Delete Row</button>
+                            <button type="button" id="add_row" class="btn btn-sm btn-dark pull-left">+ Add Row</button>
                         </div>
                     </div>
                 </div>
@@ -170,61 +189,122 @@
 @section('scripts')
 <script>
    $(document).ready(function(){
-    let row_number = {{ count(old('items', [''])) }};
-    console.log(row_number);
+    // let row_number = {{ count(old('items', [''])) }};
+    // console.log(row_number);
     
-    if (row_number<=1) {
-        $("#delete_row").hide(); 
+    // if (row_number<=1) {
+    //     $("#delete_row").hide(); 
+    // }
+    Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+    });
+
+    if ($(".tr").length <=1 ){
+        $('#delete_row').hide(); 
     }
+    $('#date').val(new Date().toDateInputValue());
 
     $("#add_row").click(function(e){
        e.preventDefault();
-
-      let new_row_number = row_number - 1;
-      console.log(row_number);
-      console.log(new_row_number);
-      $('#item' + row_number).html($('#item' + new_row_number).html());
-      $('#items_table').append('<div id="item' + (row_number + 1) + '" class="tr"></div>');
-      row_number++;
+       $('#delete_row').show();
+    //   let new_row_number = row_number - 1;
+    //   console.log(row_number);
+    //   console.log(new_row_number);
+    //   $('#item' + row_number).html($('#item' + new_row_number).html());
+    //   $('#items_table').append('<div id="item' + (row_number + 1) + '" class="tr"></div>');
+    //   row_number++;
     
-      if (row_number>=2) {
-        $("#delete_row").show(); 
-        }
+    //   if (row_number>=2) {
+    //     $("#delete_row").show(); 
+    //     }
+
+    
+    let $table = $('.table');
+    console.log($table);
+    let $top= $table.find('div.tr').first();
+    console.log($top);
+    let $new = $top.clone(true);
+    console.log($new);
+    // $new.jAutoCalc('destroy');
+    // $new.insertAfter($top);
+    $table.append($new);
+    $new.find('input[type=text]').val('');
+    $new.find('input[type=number]').val('');
+
     });
 
     $("#delete_row").click(function(e){
-      e.preventDefault();
-      console.log(row_number);
-      if(row_number > 1){
-        $("#item" + (row_number - 1)).html('');
-        row_number--;
-      }
-      if (row_number<=1) {
-        $("#delete_row").hide(); 
+        e.preventDefault();
+        $('#delete_row').show();
+        $(this).parents('.tr').remove();
+        if ($(".tr").length <=1 ){
+            $('#delete_row').hide(); 
         }
+    //   if(row_number > 1){
+    //     $("#item" + (row_number - 1)).html('');
+    //     row_number--;
+    //   }
+    //   if (row_number<=1) {
+    //     $("#delete_row").hide(); 
+    //     }
+         
+        // });
     });
   
-    // $(".qrtp, .qos").on("keydown keyup", function(event) {
-    //     $(".aqrtp").val(Math.abs(Number($(".qrtp").val()) - Number($(".qos").val())));
-
-    // });
   
     // Sbstraction 2 values to get actual quantity to purchase    
     $('#items_table').on('keydown keyup','.tr', function(){
         let qrtp = $(this).find('.qrtp').val();
         let qos =  $(this).find('.qos').val();
-
+        let aqrtp = $(this).find('.aqrtp');
         let subtract = Math.abs(qrtp-qos);
-        $(this).find('.aqrtp').val(subtract);
+        
+        aqrtp.val(subtract);
 
         // Total budget
-        if (!isNaN($(this).find('.budget').val())) {
-            let totalbudget = 0;
-            $('.budget').each(function(){
-                let sumtotalvalue = Number($(this).val());
-                totalbudget += isNaN(sumtotalvalue) ? 0 : sumtotalvalue;
+        // if (!isNaN($(this).find('.budget').val())) {
+        //     let totalbudget = 0;
+        //     $('.budget').each(function(){
+        //         let sumtotalvalue = Number($(this).val());
+        //         totalbudget += isNaN(sumtotalvalue) ? 0 : sumtotalvalue;
+        //     });
+        //     $('.totalbudget').val(totalbudget);
+        // }
+
+        // Total Row budget 
+        if (!isNaN($(this).find('.budgetforpiece').val())) {
+            // let rowbudget = 1;
+            $('.budgetforpiece').each(function(){
+                let budgetforpiece = Number($(this).val());
+                let aqrtp = $(this).parents('.tr').find('.aqrtp').val();
+                let currencysymbol = $(this).parents('.tr').find('.currency').val();
+                console.log(budgetforpiece);
+                console.log(aqrtp);
+                console.log(currencysymbol);
+                let totalrowbudget = aqrtp * budgetforpiece ;
+                console.log(totalrowbudget);
+                // console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(totalrowbudget));
+
+                let rowbudget = $(this).parents('.tr').find('.rowbudget');
+                $(rowbudget).val(totalrowbudget + ' ' + currencysymbol);
+                // $(rowbudget).val(totalrowbudget);
+
+                // Sum of Total Budget
+                // Total budget
+                // if (!isNaN($(this).find('.rowbudget').val())) {
+                    let sumrowbudget = '';
+                    $('.rowbudget').each(function(){
+                        let sumrowbudgetvalue = $(this).val();
+                        sumrowbudget += sumrowbudgetvalue + '+';
+                        console.log(sumrowbudget);
+                    });
+                    
+                    $('.sumrowbudget').val(sumrowbudget);
+                // }
             });
-            $('.totalbudget').val(totalbudget);
+            
         }
     });
     

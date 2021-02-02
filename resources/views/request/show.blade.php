@@ -1,4 +1,5 @@
-@extends('layouts.app')
+@extends('pages.requests.resource')
+
 @section('content')
 
 <div class="card">
@@ -8,13 +9,13 @@
 
     <div class="card-body">
         <div class="mb-2">
-            <table style="width: 40%" class="table table-bordered table-striped table-sm p-2">
+            <table style="width: 40%" class="table table-bordered table-striped table-sm p-3">
                 <tbody>
                     <tr>
-                        <th style="padding: 5px">
+                        <th scope="col">
                             Request Number
                         </th>
-                        <th>
+                        <th scope="col">
                             {{ $prrequest->request_number }}
                         </th>
                     </tr>
@@ -69,25 +70,25 @@
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>
+                                <th scope="col">
                                     Item_#
                                 </th>
-                                <th>
-                                    Item
+                                <th scope="col">
+                                    Item Name
                                 </th>
-                                <th>
+                                <th scope="col">
                                     quantty_req_to_pur
                                 </th>
-                                <th>
+                                <th scope="col">
                                     quantity_on_store
                                 </th>
-                                <th>
+                                <th scope="col">
                                     actual_qt_req_to_pur
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Due Time
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Budget 
                                 </th>
                             </tr>
