@@ -8,7 +8,7 @@
     </div>
 
     <div class="card-body">
-        <form action="{{ route("requests.store") }}" class="form" autocomplete="on" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("requests.store") }}" class="form request-form" autocomplete="on" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             
             <div class="row justify-content-center mb-1">
@@ -28,9 +28,11 @@
                 </div>
                 <div class="input-group input-group-sm col-md-6">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="">PR #: </span>
+                        <span class="input-group-text" id="">User Name </span>
                     </div>
-                    <input type="text" id="request_number" name="request_number" class="form-control" value="{{ old('request_number') }}">
+                    <h5 id="request_number" class="form-control" readonly>{{ $getuser->name }}</h5>
+                    <input type="hidden" name="user_id" value="{{$getuser->id}}">
+                    <input type="hidden" name="user_location" value="{{$getuser->location}}">
                     @if($errors->has('request_number'))
                         <em class="invalid-feedback">
                             {{ $errors->first('request_number') }}
@@ -45,14 +47,15 @@
             <div class="row justify-content-center mb-1">
                 <div class="input-group input-group-sm col-md-6">
                     <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">Department</label>
+                      <label class="input-group-text" for="department">Department</label>
                     </div>
-                    <select name="department" class="custom-select" id="inputGroupSelect01" value="{{ old('department') }}">
-                      <option selected>Choose...</option>
+                    <select name="department" class="custom-select" id="department" value="{{ old('department') }}">
+                      <option  value="-1" selected disabled>Choose...</option>
                       <option value="IT">IT</option>
                       <option value="Legal Affairs">Legal Affairs</option>
                       <option value="HR">HR</option>
                     </select>
+                    <div class="invalid-feedback">Please fill out this field.</div>
                 </div>
                 <div class="input-group input-group-sm col-md-6">
                     <div class="input-group-prepend">
@@ -109,12 +112,13 @@
                                         <div class="row">
                                             <div class="col-md-11">
                                                 <div class="row mb-1">
-                                                    <div class="col-md-3">
-                                                        <input type="text" name="items[]" placeholder="Item Name..." class="form-control" value="{{ old('items.' . $index) ?? '' }}">
+                                                    <div class="col-md-3 form-group">
+                                                        <input type="text" name="items[]" placeholder="Item Name..." class="form-control" id="itemname" value="{{ old('items.' . $index) ?? '' }}">
+                                                        <div class="invalid-feedback">Please fill out this field.</div>
                                                     </div>
-                    
                                                     <div class="col-md-3">
-                                                        <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp" value="{{ old('qtreqtopurs.' . $index) ?? '' }}"/>
+                                                        <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp" id="qrtp" value="{{ old('qtreqtopurs.' . $index) ?? '' }}"/>
+                                                        <div class="invalid-feedback">Please fill out this field.</div>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
@@ -128,10 +132,12 @@
                                                 </div>
                                                 <div class="row mb-1" >
                                                     <div class="col-md-3">
-                                                        <input type="text" name="descriptions[]" placeholder="description..." class="form-control" value="{{ old('descriptions.' . $index) ?? '' }}"/>
+                                                        <input type="text" name="descriptions[]" placeholder="description..." class="form-control" id="description" value="{{ old('descriptions.' . $index) ?? '' }}"/>
+                                                        <div class="invalid-feedback">Please fill out this field.</div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input type="text" name="specifications[]" placeholder="specification..." class="form-control" value="{{ old('specifications.' . $index) ?? '' }}"/>
+                                                        <input type="text" name="specifications[]" placeholder="specification..." class="form-control" id="specification" value="{{ old('specifications.' . $index) ?? '' }}"/>
+                                                        <div class="invalid-feedback">Please fill out this field.</div>
                                                     </div>
                                                     <div class="col-md-2"> 
                                                     <select class="form-control currency" id="demo-number-symbol">
@@ -165,7 +171,7 @@
                         <div class="col"></div>
                         <div class="col"></div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control sumrowbudget" placeholder="Total budget" name="totalbudget" id="totalbudget" readonly>
+                            <input type="text" class="form-control sumrowbudget" placeholder="Total budget" id="totalbudget" readonly>
                         </div>
                         <div class="col-md-1"></div>
                     </div>
@@ -192,20 +198,84 @@
     // let row_number = {{ count(old('items', [''])) }};
     // console.log(row_number);
     
-    // if (row_number<=1) {
-    //     $("#delete_row").hide(); 
-    // }
     Date.prototype.toDateInputValue = (function() {
     var local = new Date(this);
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
     return local.toJSON().slice(0,10);
     });
 
+    $('.request-form').on('submit', function(e) {
+        
+        $('.tr').each(function () {
+        const requestForm = $('.request-form');
+        const department = requestForm.find('#department');
+        const itemField = $(this).find('#itemname'); 
+        const qrtpField = $(this).find('#qrtp'); 
+        const descriptionField = $(this).find('#description');
+        const specificationField = $(this).find('#specification');
+        
+        const formErrors = validate({
+            department:department.val(),
+            itemname:itemField.val(),
+            qrtp:qrtpField.val(),
+            description:descriptionField.val(),
+            specification:specificationField.val(),
+        });
+
+        const initialErrors = {
+            department:null,
+            itemname:null,
+            qrtp:null,
+            description:null,
+            specification:null,
+        }
+
+        if(formErrors?.error){
+            const {details} = formErrors.error;
+            // console.log('Details', details);
+            details.map((detail) => {
+                initialErrors[detail.context.key] = detail.message;
+            })
+        }
+
+        console.log(initialErrors);
+        // Write Error to the UI
+        Object.keys(initialErrors).map(errorName =>{
+            if (initialErrors[errorName] !== null) {
+                // if the error exist
+                $(`#${errorName}`).removeClass("is-valid").addClass("is-invalid");
+                // Invalid Feedback element
+                $(`#${errorName}`).next("invalid-feedback").text(initialErrors[errorName]);
+            }
+            else{
+                $(`#${errorName}`).removeClass("is-invalid").addClass("is-valid");
+            }
+        });
+
+        // to Submit 
+        let isFormValid = Object.values(initialErrors).every((value) => value === null);
+        if (isFormValid)  {
+            // $(responseMessage).addClass("show");
+            $(this).find('.tr')
+            .find(".is-valid, .is-invalid")
+            .removeClass("is-valid is-invalid");
+        }
+        else {
+            e.preventDefault();
+            alert("Please Complete The Required Field");
+        }
+        });
+
+    });
+
     if ($(".tr").length <=1 ){
         $('#delete_row').hide(); 
     }
+
+    // Print Dynamic Date
     $('#date').val(new Date().toDateInputValue());
 
+    // Add Event Listner to Add row button
     $("#add_row").click(function(e){
        e.preventDefault();
        $('#delete_row').show();
@@ -231,8 +301,8 @@
     // $new.insertAfter($top);
     $table.append($new);
     $new.find('input[type=text]').val('');
-    $new.find('input[type=number]').val('');
-
+    $new.find('input[type=number]').val(''); 
+    $new.find(".is-valid, .is-invalid").removeClass("is-valid is-invalid");
     });
 
     $("#delete_row").click(function(e){
@@ -308,7 +378,27 @@
         }
     });
     
+    // Form Client Side Validateion
+    const schema = joi.object({
+        department:joi.string().label('Department').required(),
+        itemname:joi.string().min(1).max(30).required(),
+        qrtp:joi.string().min(1).required(),
+        description:joi.string().min(1).max(30).required(),
+        specification:joi.string().min(1).max(30).required(),
+    });
 
+    function validate(dataObject) {
+        // dataObject = Department,   
+        const result = schema.validate({
+            ...dataObject,
+        },{abortEarly:false});
+
+        return result;
+        } 
+    
   });
+
+  
+
 </script>
 @endsection

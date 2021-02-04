@@ -1,8 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\PrRequest;
 use App\RequestItem;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+// use Auth;
+use App\User;
+
+
 use Illuminate\Http\Request;
 
 class RequestsController extends Controller
@@ -17,7 +24,7 @@ class RequestsController extends Controller
         $prrequests = PrRequest::with('requestitems')->get();
         // dd($prrequests);
         // $totalBudget = PrRequest::prrequest()->requestitems->totalbudget;
-        return view('request.index', compact('prrequests'));
+        return view('requests.index', compact('prrequests'));
     }
 
     /**
@@ -27,7 +34,11 @@ class RequestsController extends Controller
      */
     public function create()
     {
-        return view('request.create');
+        $getuser = Auth::user();
+        // $user = User::find($getuserid);
+        // $location = Auth::user()->location;
+        // dd($location);
+        return view('requests.create', compact('getuser'));
     }
 
     /**
@@ -38,14 +49,46 @@ class RequestsController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+        $location = Auth::user()->location;
+
+        $getuser = User::find($request->user_id);
+        
+        $countprrequestlocation =  PrRequest::where('user_location',$request->user_location)->get();
+        // dd($getuserid);
+        // $countprrequestlocation = DB::select('select count(location) from users where(select )');
+
+        // $countprrequestlocation =  PrRequest::where('user_location', function($query){
+        //     $query->select('location')
+        //     ->from(with(new User)->getTable())
+        //     // ->whereIn('category_id', ['223', '15'])
+        //     ->where('id','$request->user_id');
+        // })->get();
+        // $countprrequestlocation = PrRequest::where('user_id', $request->user_id)->get();
+
+        // $prrequestforlocation = PrRequest::where($location)->get();
+        // dd($countprrequestlocation);
+        // dd(count($countprrequestlocation));
+        $newRow = count($countprrequestlocation)+1;
+
+        if ($newRow < 10) {
+            $requestnumber = $request->user_location.'-'.date('Y').'-'."00".$newRow;
+        }
+        elseif ($newRow >= 10 && $newRow <=99) {
+            $requestnumber = $request->user_location.'-'.date('Y').'-'."0".$newRow;
+        }elseif ($newRow<=100) {
+            $requestnumber = $request->user_location.'-'.date('Y').'-'.$newRow;
+        }
         
         $prrequest = PrRequest::create([
             'date' => $request->date,
-            'request_number' => $request->request_number,
+            'request_number' => $requestnumber,
             'department' => $request->department,
             'project' => $request->project,
             'site' => $request->site,
             'group' => $request->group,
+            'user_location' => $request->user_location,
+            'user_id' => Auth::id(),
         ]);
 
 
@@ -59,7 +102,8 @@ class RequestsController extends Controller
                 'qtonstore' => $request->qtonstores[$key],
                 'acqtreqtopur' => $request->acqtreqtopurs[$key],
                 'budget' => $request->budgets[$key],
-                'totalbudget' => $request->totalbudget,
+                'rowbudget' => $request->rowbudgets[$key],
+                // 'sumoftotalrowbudget' => $request->sumoftotalrowbudget,
                 // 'request_id' => $prrequest->id,
             ]);
         }
@@ -81,7 +125,7 @@ class RequestsController extends Controller
         $requestitems = $prrequest->requestitems()->get();
 
         $indexCount =1;
-        return view('resquest.show', compact('prrequest', 'requestitems','indexCount'));
+        return view('requests.show', compact('prrequest', 'requestitems','indexCount'));
     }
 
     /**

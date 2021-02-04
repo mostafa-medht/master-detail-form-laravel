@@ -18,12 +18,13 @@ class CreateRequestItemsTable extends Migration
             $table->string('item');
             $table->string('description');
             $table->string('specification');
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->integer('qtreqtopur');
-            $table->integer('qtonstore');
+            $table->integer('qtonstore')->nullable();
             $table->integer('acqtreqtopur');
-            $table->integer('budget');
-            $table->integer('rowbudget');
+            $table->integer('budget')->nullable();
+            $table->string('rowbudget')->nullable();
+            // $table->string('sumoftotalrowbudget')->nullable();
             // $table->bigInteger('sumoftotalbudget');
 
             $table->integer('pr_request_id');

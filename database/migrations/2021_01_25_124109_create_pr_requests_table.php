@@ -16,11 +16,15 @@ class CreatePrRequestsTable extends Migration
         Schema::create('pr_requests', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->string('request_number');
+            $table->string('request_number')->nullable();
             $table->string('department');
-            $table->string('project');
-            $table->string('site');
-            $table->string('group');
+            $table->string('project')->nullable();;
+            $table->string('site')->nullable();;
+            $table->string('group')->nullable();;
+            $table->string('user_location');
+
+            $table->integer('user_id');
+
             $table->timestamps();
         });
     }

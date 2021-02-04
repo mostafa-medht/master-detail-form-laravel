@@ -12,10 +12,16 @@ class PrRequest extends Model
         'department',
         'project',
         'site',
-        'group'
+        'group',
+        'user_location',
+        'user_id',
     ];
 
     public function requestitems(){
         return $this->hasMany('App\RequestItem');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\User');
     }
 }

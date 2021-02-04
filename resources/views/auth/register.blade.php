@@ -40,6 +40,26 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="Location" class="col-md-4 col-form-label text-md-right">{{ __('Location') }}</label>
+
+                            <div class="col-md-6">
+                                {{-- <input id="location" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('location') }}" required autocomplete="location"> --}}
+                                <select name="location" class="form-control" id="inputGroupSelect01" required autocomplete="location" value="{{ old('location') }}">
+                                    <option disabled selected>Choose...</option>
+                                    <option value="HQ">Headquarter</option>
+                                    <option value="F">Factory</option>
+                                    <option value="Out">Outside</option>
+                                  </select>
+
+                                @error('location')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

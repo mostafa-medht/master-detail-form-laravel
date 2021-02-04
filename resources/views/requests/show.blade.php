@@ -1,4 +1,4 @@
-@extends('pages.requests.resource')
+@extends('layouts.app')
 
 @section('content')
 

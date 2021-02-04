@@ -8,18 +8,18 @@ class RequestItem extends Model
 {
     protected $fillable = [
         'item',
-        'description',
-        'specification',
-        'date',
         'qtreqtopur',
-        'qtonstore',  
+        'qtonstore',
         'acqtreqtopur',
+        'date',
+        'description',  
+        'specification',
         'budget',
         'rowbudget',
         'request_id'  
     ];
 
-    public function request(){
+    public function prrequest(){
         return $this->belongsTo('App\PrRequest');
     }
 }
