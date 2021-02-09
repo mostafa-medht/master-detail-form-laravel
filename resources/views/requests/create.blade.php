@@ -8,7 +8,7 @@
     </div>
 
     <div class="card-body">
-        <form action="{{ route("requests.store") }}" class="form request-form" autocomplete="on" method="POST" enctype="multipart/form-data" novalidate>
+        <form action="{{ route("requests.store") }}" class="form request-form" autocomplete="on" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="row justify-content-center mb-1">
@@ -50,7 +50,7 @@
                       <label class="input-group-text" for="department">Department</label>
                     </div>
                     <select name="department" class="custom-select" id="department" value="{{ old('department') }}">
-                      <option  value="-1" selected disabled>Choose...</option>
+                      <option  value="-1" selected hidden disabled>Choose...</option>
                       <option value="IT">IT</option>
                       <option value="Legal Affairs">Legal Affairs</option>
                       <option value="HR">HR</option>
@@ -62,7 +62,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Project</label>
                       </div>
                       <select name="project" class="custom-select" id="inputGroupSelect01">
-                        <option selected>Choose...</option>
+                        <option value="-1" selected hidden disabled>Choose...</option>
                         <option value="Aswan Project">aswan_project</option>
                         <option value="New Capital Project">new_capital_cproject</option>
                         <option value="Minya">minya_project</option>
@@ -76,7 +76,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Site</label>
                       </div>
                       <select name="site" class="custom-select" id="inputGroupSelect01">
-                        <option selected>Choose...</option>
+                        <option value="-1" selected hidden disabled>Choose...</option>
                         <option value="Aswan">Aswan</option>
                         <option value="New Capital">New Capital</option>
                         <option value="Minya">Minya</option>
@@ -87,9 +87,10 @@
                         <label class="input-group-text" for="inputGroupSelect01">Group</label>
                       </div>
                       <select name="group" class="custom-select" id="inputGroupSelect01">
-                        <option selected>Choose...</option>
-                        <option value="Product">Product</option>
-                        <option value="Product">Service</option>
+                        <option value="-1" selected hidden disabled>Choose...</option>
+                        <option value="IT">IT</option>
+                        <option value="Accounting">Accounting</option>
+                        <option value="Constraction">Constraction</option>
                       </select>
                 </div>
             </div>
@@ -109,57 +110,95 @@
                         <div id="items_table" class="table">
                             @foreach (old('items', ['']) as $index => $oldProduct)
                                     <div id="item" class="tr">
-                                        <div class="row">
-                                            <div class="col-md-11">
-                                                <div class="row mb-1">
-                                                    <div class="col-md-3 form-group">
-                                                        <input type="text" name="items[]" placeholder="Item Name..." class="form-control" id="itemname" value="{{ old('items.' . $index) ?? '' }}">
+                                        {{-- <div class="row"> --}}
+                                            {{-- <div class="col-md-11"> --}} 
+                                                <div class="form-row m-1">
+                                                    <div class="col-md-4">
+                                                        <select name="subgroups[]" class="form-control" id="subgroups" value="{{ old('department') }}">
+                                                            <option  value="-1" selected hidden disabled>SubGroup...</option>
+                                                            <option value="Equipment">Equipment</option>
+                                                            <option value="Tools">Tool</option>
+                                                            <option value="Material">Material</option>
+                                                        </select>
                                                         <div class="invalid-feedback">Please fill out this field.</div>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-4">
+                                                        <select name="items[]" class="form-control" id="item" value="{{ old('item') }}">
+                                                            <option  value="-1" selected hidden disabled>Item...</option>
+                                                            <option value="Desktop">Desktop</option>
+                                                            <option value="Hardesk">Hardesk</option>
+                                                            <option value="Laptop">Laptop</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                                    </div>
+                                                    <div class="col-md-4">
                                                         <input type="number" name="qtreqtopurs[]" placeholder="Qt required to purchase..." class="form-control qrtp" id="qrtp" value="{{ old('qtreqtopurs.' . $index) ?? '' }}"/>
                                                         <div class="invalid-feedback">Please fill out this field.</div>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}" readonly/>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" name="dates[]" placeholder="Due Time..." onfocus="(this.type='date')" class="form-control" value="{{ old('dates.' . $index) ?? '' }}"/>
-                                                    </div> 
                                                 </div>
-                                                <div class="row mb-1" >
-                                                    <div class="col-md-3">
-                                                        <input type="text" name="descriptions[]" placeholder="description..." class="form-control" id="description" value="{{ old('descriptions.' . $index) ?? '' }}"/>
-                                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                                <div class="form-row mx-0" >
+                                                    <div class="col-md-4 no-gutters">
+                                                        <div class="col-md-12">
+                                                            <textarea type="text" name="specifications[]" placeholder="Specifications/Comments..." class="form-control" id="specification" value="{{ old('specifications.' . $index) ?? '' }}" rows="3" cols="10"></textarea>
+                                                            <div class="invalid-feedback">Please fill out this field.</div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <input type="text" name="specifications[]" placeholder="specification..." class="form-control" id="specification" value="{{ old('specifications.' . $index) ?? '' }}"/>
-                                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                                    <div class="col-md-8 no-gutters">
+                                                        <div class="form-row mb-1 no-gutters">
+                                                            <div class="col-md-4">
+                                                                <input type="number" name="qtonstores[]" placeholder="Qt On Store..." class="form-control qos" value="{{ old('qtonstores.' . $index) ?? '' }}"/>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="number" name="acqtreqtopurs[]" placeholder="Actually Qt required to purchase..." class="form-control aqrtp" value="{{ old('acqtreqtopurs.' . $index) ?? '' }}" readonly/>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <select name="units[]" class="form-control unit" id="unit">
+                                                                    <option>Chosse unit...</option>
+                                                                    <option value="unit">Unit</option>
+                                                                    <option value="&#13199;">&#13199;</option>
+                                                                    <option value="&#13217;">&#13217;</option>
+                                                                    <option value="&#13221;">&#13221;</option>
+                                                                    <option value="L^3">L^3</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>     
+                                                        <div class="form-row">
+                                                            <div class="col-md-6"> 
+                                                                <select name="piroirtys[]" class="form-control piroirty" id="piroirty" placeholder="Chosse Currncy">
+                                                                    <option>Pirority...</option>
+                                                                    <option value="low">Low (more than 1 week)</option>
+                                                                    <option value="medium">Medium (within 7 days)</option>
+                                                                    <option value="high">High (within 3 days)</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <button type="button" id='delete_row' class="rounded-pill btn btn-danger btn-sm">Delete</button>
+                                                            </div>
+                                                        </div>   
                                                     </div>
-                                                    <div class="col-md-2"> 
-                                                    <select class="form-control currency" id="demo-number-symbol">
-                                                        <option selected>Currency..</option>
-                                                        <option value="EGP ">EGP</option>
-                                                        <option value="$ ">$</option>
-                                                        <option value="&pound; ">&pound;</option>
-                                                        <option data-locale="european" value="&euro; ">&euro; </option>
-                                                    </select>
+                                                    
+                                                    {{-- <div class="col-md-2"> 
+                                                        <select name="currencys[]" class="form-control currency" id="currency" placeholder="Chosse Currncy">
+                                                            <option>currency...</option>
+                                                            <option value="EGP">EGP</option>
+                                                            <option value="$ ">$</option>
+                                                            <option value="&pound; ">&pound;</option>
+                                                            <option data-locale="european" value="&euro; ">&euro; </option>
+                                                        </select>
                                                     </div>   
                                                     <div class="col-md-2">
                                                         <input type="number" name="budgets[]" placeholder="Budget For Piece..." class="form-control budgetforpiece" value="{{ old('budgets.' . $index) ?? '' }}"/>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <input type="text" name="rowbudgets[]" placeholder="Total Budget..." class="form-control rowbudget" value="{{ old('budgets.' . $index) ?? '' }}" readonly/>
-                                                    </div>      
+                                                    </div>       --}}
                                                 </div>
-                                            </div>
-                                            <div class="col-md-1 mb-3">
-                                                <button type="button" id='delete_row' class="mt-4 rounded-pill btn btn-danger btn-sm">Delete</button>
-                                            </div>
-                                        </div>
+                                            {{-- </div> --}}
+                                            {{-- <div class="col-md-1 mb-3"> --}}
+                                            {{-- </div> --}}
+                                        {{-- </div> --}}
                                         <hr>
                                     </div>
                                 
@@ -167,14 +206,14 @@
                             {{-- <div id="item{{ count(old('items', [''])) }}" class="tr"></div> --}}
                         </div>
                     
-                    <div class="row mb-3">
+                    {{-- <div class="row mb-3">
                         <div class="col"></div>
                         <div class="col"></div>
                         <div class="col-md-4">
                             <input type="text" class="form-control sumrowbudget" placeholder="Total budget" id="totalbudget" readonly>
                         </div>
                         <div class="col-md-1"></div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-12">
                             <button type="button" id="add_row" class="btn btn-sm btn-dark pull-left">+ Add Row</button>
@@ -203,70 +242,72 @@
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
     return local.toJSON().slice(0,10);
     });
-
-    $('.request-form').on('submit', function(e) {
+    // test =1;
+    // $('.request-form').on('submit', function(e) {
         
-        $('.tr').each(function () {
-        const requestForm = $('.request-form');
-        const department = requestForm.find('#department');
-        const itemField = $(this).find('#itemname'); 
-        const qrtpField = $(this).find('#qrtp'); 
-        const descriptionField = $(this).find('#description');
-        const specificationField = $(this).find('#specification');
+    //     const requestForm = $(this);
+    //     const department = requestForm.find('.department');
+    //     // $('.tr').each(function () {
+    //         // test++;
+    //         // console.log(test);
+    //     const itemField = $(requestForm).find('.itemname'); 
+    //     const qrtpField = $(requestForm).find('.qrtp'); 
+    //     const descriptionField = $(requestForm).find('.description');
+    //     const specificationField = $(requestForm).find('.specification');
         
-        const formErrors = validate({
-            department:department.val(),
-            itemname:itemField.val(),
-            qrtp:qrtpField.val(),
-            description:descriptionField.val(),
-            specification:specificationField.val(),
-        });
+    //     const formErrors = validate({
+    //         department:department.val(),
+    //         itemname:itemField.val(),
+    //         qrtp:qrtpField.val(),
+    //         description:descriptionField.val(),
+    //         specification:specificationField.val(),
+    //     });
 
-        const initialErrors = {
-            department:null,
-            itemname:null,
-            qrtp:null,
-            description:null,
-            specification:null,
-        }
+    //     const initialErrors = {
+    //         department:null,
+    //         itemname:null,
+    //         qrtp:null,
+    //         description:null,
+    //         specification:null,
+    //     }
 
-        if(formErrors?.error){
-            const {details} = formErrors.error;
-            // console.log('Details', details);
-            details.map((detail) => {
-                initialErrors[detail.context.key] = detail.message;
-            })
-        }
+    //     if(formErrors?.error){
+    //         const {details} = formErrors.error;
+    //         // console.log('Details', details);
+    //         details.map((detail) => {
+    //             initialErrors[detail.context.key] = detail.message;
+    //         })
+    //     }
 
-        console.log(initialErrors);
-        // Write Error to the UI
-        Object.keys(initialErrors).map(errorName =>{
-            if (initialErrors[errorName] !== null) {
-                // if the error exist
-                $(`#${errorName}`).removeClass("is-valid").addClass("is-invalid");
-                // Invalid Feedback element
-                $(`#${errorName}`).next("invalid-feedback").text(initialErrors[errorName]);
-            }
-            else{
-                $(`#${errorName}`).removeClass("is-invalid").addClass("is-valid");
-            }
-        });
+    //     console.log(initialErrors);
+    //     // Write Error to the UI
+    //     Object.keys(initialErrors).map(errorName =>{
+    //         if (initialErrors[errorName] !== null) {
+    //             // if the error exist
+    //             $(`#${errorName}`).removeClass("is-valid").addClass("is-invalid");
+    //             // Invalid Feedback element
+    //             $(`#${errorName}`).next("invalid-feedback").text(initialErrors[errorName]);
+    //         }
+    //         else{
+    //             $(`#${errorName}`).removeClass("is-invalid").addClass("is-valid");
+    //         }
+    //     });
 
-        // to Submit 
-        let isFormValid = Object.values(initialErrors).every((value) => value === null);
-        if (isFormValid)  {
-            // $(responseMessage).addClass("show");
-            $(this).find('.tr')
-            .find(".is-valid, .is-invalid")
-            .removeClass("is-valid is-invalid");
-        }
-        else {
-            e.preventDefault();
-            alert("Please Complete The Required Field");
-        }
-        });
+    //     // to Submit 
+    //     let isFormValid = Object.values(initialErrors).every((value) => value === null);
+    //     if (isFormValid)  {
+    //         // $(responseMessage).addClass("show");
+    //         $(this).find('.tr')
+    //         .find(".is-valid, .is-invalid")
+    //         .removeClass("is-valid is-invalid");
+    //     }
+    //     else {
+    //         e.preventDefault();
+    //         alert("Please Complete The Required Field");
+    //     }
+    //     // });
 
-    });
+    // });
 
     if ($(".tr").length <=1 ){
         $('#delete_row').hide(); 

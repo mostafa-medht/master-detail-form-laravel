@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class RequestItem extends Model
 {
     protected $fillable = [
+        'subgroup',
         'item',
+        'specification',
         'qtreqtopur',
         'qtonstore',
         'acqtreqtopur',
-        'date',
-        'description',  
-        'specification',
+        'unit',
+        'piroirty',
+        'currency',
         'budget',
         'rowbudget',
         'request_id'  

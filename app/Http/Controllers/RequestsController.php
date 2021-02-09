@@ -94,20 +94,22 @@ class RequestsController extends Controller
 
         foreach ($request->items as $key => $item) {
             $prrequest->requestitems()->create([
+                'subgroup' => $request->subgroups[$key],
                 'item' => $item,
-                'description' => $request->descriptions[$key],
                 'specification' => $request->specifications[$key],
-                'date' => $request->dates[$key],
+                'piroirty' => $request->piroirtys[$key],
                 'qtreqtopur' => $request->qtreqtopurs[$key],
                 'qtonstore' => $request->qtonstores[$key],
                 'acqtreqtopur' => $request->acqtreqtopurs[$key],
+                'currency' => $request->currencys[$key],
+                'unit' => $request->units[$key],
                 'budget' => $request->budgets[$key],
                 'rowbudget' => $request->rowbudgets[$key],
                 // 'sumoftotalrowbudget' => $request->sumoftotalrowbudget,
                 // 'request_id' => $prrequest->id,
             ]);
         }
-
+        
         return redirect()->route('requests.index')->with('message', 'Request created Successfully');
 
     }
@@ -124,8 +126,11 @@ class RequestsController extends Controller
 
         $requestitems = $prrequest->requestitems()->get();
 
+        // dd($requestitems);        
+        // $rowbudget = prrequest()->requestitems()->find(''); 
         $indexCount =1;
-        return view('requests.show', compact('prrequest', 'requestitems','indexCount'));
+        
+        return view('requests.show', compact('prrequest', 'requestitems','indexCount', 'totalrowbudget'));
     }
 
     /**

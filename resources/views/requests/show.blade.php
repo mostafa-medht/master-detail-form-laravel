@@ -67,26 +67,29 @@
                 </div>
                 <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover justify-content-center text-center">
                         <thead>
                             <tr>
                                 <th scope="col">
-                                    Item_#
+                                    Serial Number
                                 </th>
                                 <th scope="col">
                                     Item Name
                                 </th>
                                 <th scope="col">
-                                    quantty_req_to_pur
+                                    Item <br> Specification
                                 </th>
                                 <th scope="col">
-                                    quantity_on_store
+                                    Quantity required to purchase
                                 </th>
                                 <th scope="col">
-                                    actual_qt_req_to_pur
+                                    Quantity on store
                                 </th>
                                 <th scope="col">
-                                    Due Time
+                                    Actual Qty to be purchased
+                                </th>
+                                <th scope="col">
+                                    Priority
                                 </th>
                                 <th scope="col">
                                     Budget 
@@ -100,30 +103,38 @@
                                     {{-- {{$requestitem->id}} --}}
                                     {{ $indexCount++}}
                                 </th>
-                                <th>
+                                <td>
                                     {{$requestitem->item}}
-                                </th>
-                                <th>
+                                </td>
+                                <td>
+                                    {{$requestitem->specification}}
+                                </td>
+                                <td>
                                     {{$requestitem->qtreqtopur}}
-                                </th>
-                                <th>
+                                </td>
+                                <td>
                                     {{$requestitem->qtonstore}}
-                                </th>
-                                <th>
+                                </td>
+                                <td>
                                     {{$requestitem->acqtreqtopur}}
-                                </th>
-                                <th>
-                                    {{$requestitem->date}}
-                                </th>
-                                <th>
-                                    {{$requestitem->budget}}
-                                </th>
+                                </td>
+                                <td>
+                                    {{$requestitem->piroirty}}
+                                </td>
+                                <td>
+                                    {{$requestitem->rowbudget}}
+                                </td>
                             </tr>
                         @endforeach
                             <tr>
                                 <th>Total Budget : </th>
-                                <td colspan="5"></td>
-                                <th>{{$requestitems[0]->totalbudget}}</th>
+                                <td colspan="6"></td>
+                                <th>
+                                    @foreach ($requestitems as $item)
+                                        {{$item->rowbudget}}
+                                    @endforeach
+                                    {{-- {{$totalrowbudget}} --}}
+                                </th>
                             </tr>    
                         </tbody>    
                     </table>    

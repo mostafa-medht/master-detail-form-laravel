@@ -27,13 +27,13 @@
                             Request Date
                         </th>
                         <th>
-                            Items   
+                            Items SubGroup  
                         </th>
                         <th>
-                            Total Row Budget
+                            Items
                         </th>
                         <th>
-                            Due Time
+                            Piroirty
                         </th>
                         <th>
                             &nbsp;
@@ -54,18 +54,18 @@
                             <td>
                                 <ul>
                                 @foreach($prrequest->requestitems as $key => $item)
-                                    <li>{{ $item->item }} ({{$item->acqtreqtopur}} * {{ $item->budget }})</li>
+                                    {{ $item->subgroup }}<br>
                                 @endforeach
                                 </ul>
                             </td>
                             <td>
                                 @foreach($prrequest->requestitems as $key => $item)
-                                    {{$item->rowbudget.'+'}} 
+                                    {{$item->item}}<br> 
                                 @endforeach
                             </td>
                             <td>
                                 @foreach($prrequest->requestitems as $key => $item)
-                                    {{$item->date}}
+                                    {{$item->piroirty}}
                                     <br>
                                 @endforeach  
                             </td>

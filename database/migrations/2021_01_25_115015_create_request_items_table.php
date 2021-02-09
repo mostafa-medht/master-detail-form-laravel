@@ -15,13 +15,15 @@ class CreateRequestItemsTable extends Migration
     {
         Schema::create('request_items', function (Blueprint $table) {
             $table->id();
+            $table->string('subgroup');
             $table->string('item');
-            $table->string('description');
-            $table->string('specification');
-            $table->date('date')->nullable();
+            $table->text('specification');
+            $table->string('piroirty', 10)->nullable();
             $table->integer('qtreqtopur');
             $table->integer('qtonstore')->nullable();
             $table->integer('acqtreqtopur');
+            $table->string('currency', 10)->nullable();
+            $table->string('unit', 10)->nullable();
             $table->integer('budget')->nullable();
             $table->string('rowbudget')->nullable();
             // $table->string('sumoftotalrowbudget')->nullable();
